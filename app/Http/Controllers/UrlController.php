@@ -32,17 +32,19 @@ class UrlController extends Controller
 
         $clicks = env('APP_URL', false).'/clicks/'.$tag;
 
-        $message = '
-            <p><b>Short URL</b>: <a href="'.$validatedData['shortUrl'].'">'.$validatedData['shortUrl'].'</a></p>
-            <p>Check shortened URL clicks: <a href="'.$clicks.'">'.$clicks.'</a></p>
-        ';
+        $message = [
+            'short_url' => $validatedData['shortUrl'],
+            'clicks' => $clicks
+        ];
 
-        return redirect('/urls')->with('status', $message);
+        return response()->json($message, 200);
     }
 
     public function urlClicksCounter(Request $request, URL $url)
     {
-        echo "<h1>Total Clicks: $url->clicks</h1>";
+        $title = 'URL Clicks';
+
+        return view('urls.clicks', compact(['title', 'url']));
     }
 
     public function shortToFullUrlRedirection(Request $request, URL $url)
